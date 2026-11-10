@@ -1,0 +1,2 @@
+import {requestRoom} from '../server/service.mjs';
+export default async function handler(req,res){res.setHeader('Cache-Control','no-store');if(req.method!=='POST')return res.status(405).json({error:'Use POST'});try{const raw=typeof req.body==='string'?req.body:JSON.stringify(req.body);if(!raw||raw.length>16384)return res.status(413).json({error:'Request too large'});return res.status(200).json(await requestRoom(JSON.parse(raw)))}catch(error){return res.status(400).json({error:error.message})}}

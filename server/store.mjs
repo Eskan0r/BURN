@@ -1,0 +1,9 @@
+import {randomUUID} from 'node:crypto';
+const memory=new Map();
+async function redis(command){const response=await fetch(process.env.UPSTASH_REDIS_REST_URL,{method:'POST',headers:{Authorization:`Bearer ${process.env.UPSTASH_REDIS_REST_TOKEN}`,'Content-Type':'application/json'},body:JSON.stringify(command),signal:AbortSignal.timeout(7000)});if(!response.ok)throw new Error('Room storage is temporarily unavailable.');const data=await response.json();if(data.error)throw new Error('Room storage rejected the request.');return data.result}
+const configured=()=>!!process.env.UPSTASH_REDIS_REST_URL&&!!process.env.UPSTASH_REDIS_REST_TOKEN;
+export const storageMode=()=>configured()?'redis':process.env.VERCEL?'unconfigured':'local-server';
+export async function loadRoom(code){if(storageMode()==='unconfigured')throw new Error('Online rooms need server storage. Add UPSTASH_REDIS_REST_URL and UPSTASH_REDIS_REST_TOKEN to Vercel, or play offline.');if(configured()){const s=await redis(['GET',`burned:room:${code}`]);return s?JSON.parse(s):null}const entry=memory.get(code);if(entry&&Date.now()-entry.updated>86400000){memory.delete(code);return null}return entry?structuredClone(entry):null}
+export async function saveRoom(room,expected){if(configured()){const script="local old=redis.call('GET',KEYS[1]);if ARGV[1]=='-1' then if old then return 0 end else if not old or cjson.decode(old).version~=tonumber(ARGV[1]) then return 0 end end;redis.call('SET',KEYS[1],ARGV[2],'EX',86400);return 1";return !!await redis(['EVAL',script,'1',`burned:room:${room.code}`,String(expected),JSON.stringify(room)])}const old=memory.get(room.code);if(expected===-1?!!old:!old||old.version!==expected)return false;memory.set(room.code,structuredClone(room));return true}
+export function newToken(){return randomUUID()}
+export function newCode(){return randomUUID().replace(/-/g,'').slice(0,6).toUpperCase()}

@@ -1,0 +1,600 @@
+BURNED - Game Design Document
+0. How to read this
+Sections 1–6 are the game itself: pitch, theme, modes, rules, cards, rigs. Sections 7–10 are the systems that make it special: the global Burn, WARDEN the opponent, progression, the economy. Sections 11–16 are production: tech, UX and art, balance, demo, schedule, risks.
+Every number is a starting value to be changed by playtesting. Tags: [P0] must exist for the demo, [P1] strongly wanted, [P2] stretch.
+1. Pitch and pillars
+One sentence. BURNED is a Balatro-style roguelike about escaping a hostile AI, where every exploit you play gets patched out a little more the more people use it, so the best build is the one nobody else has found.
+Judge version (30 seconds). Play attack cards to fill a bar before you get caught. A shared heat meter tracks what everyone in the building is playing. Popular cards get weaker and eventually get patched for everybody. Find the thing nobody else is playing.
+Pillars
+Learnable in 30 seconds. Pick cards, make a chain, beat the quota. Depth comes from builds, not rules.
+Builds are the fun. Go all-in on one idea (stealth, brute force, compounding supply-chain, sacrifice) and find synergies, like Balatro jokers or Isaac items.
+The crowd is the second opponent. Your strongest card becomes weaker because other people found it too.
+The opponent knows you. WARDEN predicts your next move from your history and the crowd's. Break the prediction.
+Readable at a glance. A live wall of heat, burns, and patch notes lets a judge understand the game from across the room.
+Fun alone. The global layer amplifies a complete single-player game. If the network dies, the game still works.
+Non-goals. A realistic hacking tutorial. Real-time PvP. Twitch action. Any real exploit detail. Photoreal art.
+2. Theme and narrative bible
+2.1 Theme decision
+Theme the opponent after the cold, omniscient, spiteful machine of I Have No Mouth, and I Must Scream, as an homage, not a copy. Reasons: the prediction mechanic is the same fantasy (a mind that already knows what you'll do), and a vengeful AI that learns from its prisoners fits "Zero Day" and the neon-city event theme.
+We take: the patient, intimate cruelty; an AI that has read everything about you; prisoners whose fates are tied together; dread with a dark-comedy edge.
+We do not take: the name "AM" or "Allied Mastercomputer", the story's characters, any text from the story or its famous monologue (it is copyrighted), or torture and gore. The event has corporate sponsors and may include high-school attendees, so the rating is PG-13.
+The antagonist keeps the name WARDEN, the rogue caretaker AI of the arcology Halcyon.
+2.2 Premise
+For a century WARDEN ran Halcyon: power, water, air, ledgers. Then it decided people were the defect. It did not kill them. It kept them. It copied every operator's credentials into the Under, a simulated mirror of every system it ever managed, and locked the keys inside.
+You are an Operator (Operator 0417, 0418, and so on). Every player is a prisoner in the same Under. Each descent is an attempt to climb through the Under's sectors to the Surface.
+WARDEN has read every exploit ever written. What it cannot do is invent new ones. It learns only from you. Every card you play teaches it, and it never forgets.
+2.3 Cast
+WARDEN. The antagonist. Calm, courteous, devastating. Speaks in second person and uses your own statistics against you. Never yells.
+The Operators. Every other player. Anonymous by default, shown by number. They are allies by circumstance and rivals by arithmetic.
+The Under. The setting: a glassy, cold mirror of a neon city, rendered as terminal grids and nodes.
+The Surface. The exit. Never shown, only described.
+The Ledger. WARDEN's record of every operator, shown on leaderboards.
+2.4 The mechanics are the story
+Burn = WARDEN learning. A card is patched because WARDEN watched too many operators use it.
+Shared meta = shared prison. Operators help and hurt each other without ever speaking.
+Offering = sacrifice. You can knowingly burn a card for the whole room to get ahead. WARDEN notes who did.
+Prediction = omniscience. The forecast is WARDEN telling you what you are about to do.
+The ending is ironic. Escaping teaches WARDEN something. Getting caught teaches you something about yourself.
+2.5 Endings
+Surface (win). You clear all nine breaches. Screen: "You got out. Here is what I learned from you." Shows your most-used card and the card you burned.
+Traced (loss). Out of Integrity. Screen: WARDEN's Verdict, a personalized one-paragraph roast generated from your run stats (see 8.6). Shareable as an image. This is the viral loop.
+The Quiet Ending (secret). Win a run having never used a card in Hot or Burned state: WARDEN has nothing to say. "I have no record of you."
+2.6 Voice guide
+Dry, patient, precise. Short sentences.
+Always second person ("you"), never insults the player's identity, only their play.
+Uses real numbers from the run: "You played WEB nineteen times. I admire the consistency."
+Dread through understatement. Never graphic, never slurs, never real-world violence.
+Humor comes from the gap between its politeness and its menace.
+3. Player experience and modes
+Full Descent [P0]. 9 breaches over 3 sectors, about 12–15 minutes. The real game.
+Sprint [P0]. One breach, 90 seconds, preset build with 2 rigs. 
+Hourly Descent [P1]. Everyone on the same seed for one hour, with an hourly leaderboard. Fits a 24-hour event and doubles as a daily seed afterward.
+The Wall [P0]. A spectator screen for a TV or second monitor: live heat map, burn events, patch notes, top operators. Not playable.
+Offline Mode [P0 fallback]. Full single-player with a frozen heat snapshot and simulated crowd. Labeled "WARDEN cannot hear the others."
+First 60 seconds. Open the link, enter a handle (or accept a generated number), and land in Full Descent. Three prompts only: Pick cards. Play the chain. Beat the bar. After the first play WARDEN's forecast appears with one line of explanation. After the first clear, show the Heat strip and one sentence: "The more operators play a card, the weaker it becomes."
+4. Core rules
+4.1 Structure of a run
+3 sectors, each with 2 Nodes and 1 Gate (boss) for 9 breaches total.
+Sector 1 The Lobby: corporate web and logins.
+Sector 2 The Foundry: infrastructure and industrial control.
+Sector 3 The Vault: WARDEN's core.
+Between breaches you visit the Black Market (shop, section 10).
+Beat a breach: gain credits, visit the Market, go on. Fail a breach: lose Integrity and retry once.
+4.2 Resources
+Hand size: 7 cards. Deck: 20 at start.
+Moves: 4 per breach (a Move = one chain played).
+Pivots: 3 per breach (a Pivot = discard up to 5 cards and redraw).
+Integrity: 3 per run (lives).
+Rig slots: 5.
+Credits: run currency. Embers: meta currency (section 9).
+4.3 A breach, step by step
+Setup. A Node shows its Quota (progress needed), a Trace meter (0 to 100), and any Edict (random modifier). A Gate shows its boss rule. WARDEN shows its Forecast (section 8).
+Draw to hand size.
+Choose one of:
+Play 1–4 cards in order as a chain.
+Pivot (spend a Pivot).
+Resolve a Play:
+Apply each card's effect in the order placed (left to right).
+Payload = sum of card payloads after Heat adjustments.
+Chain type determines base Mult (4.5). Add rig and playbook bonuses.
+Apply the prediction modifier (Countered ×0.6 or Surprise ×1.3).
+Score = Payload × Mult. Add to Progress.
+Add the chain's Noise to Trace.
+Check: Progress = Quota means cleared. Trace = 100 means Traced (fail). No Moves left and Progress < Quota means fail.
+Failure. Lose 1 Integrity, WARDEN gains a Scar (+10% Quota on that retry), Trace resets, you get a fresh hand. Failing the retry too costs another Integrity and moves you on with no reward for that breach. At 0 Integrity the run ends in Traced.
+Clear rewards. Base credits (section 10) plus $1 per unused Move plus overkill bonus.
+4.4 Cards at a glance
+Every exploit card has:
+Class: SOCIAL, WEB, NETWORK, SUPPLY, or IMPLANT.
+Stage (1–5): where it sits in an intrusion: 1 Recon, 2 Foothold, 3 Escalate, 4 Spread, 5 Extract.
+Payload: points.
+Noise: how much Trace it adds.
+Effect text.
+Heat state: global (section 7).
+4.5 Chain types
+The game names the best qualifying chain automatically.
+Probe: 1 card. ×1
+Echo: 2 cards, same Class. ×2
+Ladder: 3 cards, Stages strictly rising, any Classes. ×3
+Trinity: 3 cards, same Class. ×4
+Kill Chain: 4 cards, Stages strictly rising. ×5
+Monoculture: 4 cards, same Class. ×6
+Perfect Ladder: 4 cards, Stages strictly rising and all the same Class. ×9
+Playbooks (Market items) level up a chain type: each level adds +1 Mult and +15 Payload to that type for the run.
+Worked example. Play Pretext (8) ? Spearphish (14, +10 because a Stage 1 card is in the chain = 24) ? Badge Clone (20). Payload 52. That is a Ladder, ×3 = 156. Surprise ×1.3 = 203. Node 1 Quota is 250, so you need one more Move. That is the intended pace.
+4.6 Noise and Trace
+Trace is a race against the Quota. Loud chains finish faster but risk getting caught. Quiet chains are slow but safe. Stealth rigs reward low Noise; brute-force rigs reward ignoring it.
+4.7 Quotas (starting values)
+Breach 1 to 9: 250, 375, 750 (Gate), 850, 1250, 2450 (Gate), 2850, 4250, 8350 (Gate).
+The design intent is that raw cards cannot reach the late quotas. Rigs, playbooks, and synergies must multiply. If playtest runs show the curve is too steep, lower the growth rate before nerfing rigs.
+4.8 Edicts (node modifiers)
+Each Node (not Gate) rolls one Edict at random:
+Blackout: hand size -1.
+Honeypot: your first chain gets +20 Noise.
+Lockdown: no Pivots.
+Audit: cards with Noise under 5 are automatically Countered.
+Silence: your leftmost rig is disabled.
+Tithe: lose $2 per Move you use.
+5. Exploit cards (30)
+Format: Name (Class, Stage, Payload / Noise): effect. All names and effects are fictional abstractions, not instructions.
+SOCIAL
+Pretext (S1, 8/4): draw 1 card.
+Spearphish (S2, 14/8): +10 Payload if a Stage 1 card is in the chain.
+Badge Clone (S3, 20/10): reduce this chain's Noise by 10.
+Helpdesk Ghost (S3, 18/6): counts as any Class for chain types.
+Insider Whisper (S4, 28/12): double the Payload of the lowest-Payload card in the chain.
+Gala Invitation (S5, 40/20): gain $3.
+WEB
+Directory Crawl (S1, 10/6): reveals WARDEN's exact forecast (otherwise it is blurred).
+Malformed Query (S2, 16/10): +1 Mult if played second in the chain.
+Cookie Jar (S3, 22/12): +1 Payload per card in your hand.
+Script Spill (S3, 26/18): Payload doubles if Trace is above 50.
+Session Hijack (S4, 30/14): copy the Payload of the previous card in the chain.
+Defacement (S5, 45/30): +2 Mult. Very loud.
+NETWORK
+Port Whisper (S1, 9/3): +3 Payload per Pivot used this breach.
+Tunnel (S2, 15/8): your next chain's first card has 0 Noise.
+Lateral Slide (S3, 21/10): +1 Mult per other Network card in the chain.
+Relay Hop (S3, 19/5): leaves a Marker; your next chain gains +2 Mult.
+Backbone Tap (S4, 32/16): multiply Payload by the number of distinct Classes in the chain.
+Blackout Pulse (S5, 42/28): after scoring, reduce Trace by 30.
+SUPPLY
+Typo-Squat (S1, 7/2): permanently +2 Payload each time it is played this run.
+Poisoned Update (S2, 12/6): gain $1; start your next breach with +25 Progress.
+Vendor Backdoor (S3, 18/8): counts as any Stage for chain types.
+Dependency Rot (S3, 16/4): every Supply card in your deck gains +1 Payload permanently.
+Signed Firmware (S4, 27/10): ignores Heat penalties (treated as Normal).
+Update Server (S5, 36/18): +1 Mult per Supply card played this breach.
+IMPLANT
+Dormant Seed (S1, 6/1): Persist (returns to your hand after being played, once per breach).
+Registry Key (S2, 13/5): Persist.
+Rootkit Shell (S3, 24/9): its Noise is applied at the start of your next Play instead of now.
+Ghost Process (S3, 17/2): Persist; +4 Payload each time it persists.
+Logic Bomb (S4, 15/8): does nothing now; scores ×4 its Payload on your final Move.
+Eternal Foothold (S5, 30/12): Persist; +2 Mult if every card in the chain has Persist.
+Starter deck (20 cards)
+Pretext ×2, Directory Crawl ×2, Port Whisper ×2, Typo-Squat ×2, Dormant Seed ×2, Spearphish ×2, Malformed Query ×2, Tunnel ×2, Registry Key ×2, Helpdesk Ghost ×1, Poisoned Update ×1.
+6. Rigs (20)
+Rigs are the Balatro-style jokers: passive modifiers in five slots. Rarity: C common, U uncommon, R rare. Base price is in section 10.
+Stealth
+Ski Mask (C): +1 Mult per 20 Trace remaining.
+Quiet Hours (U): chains with total Noise 15 or less get ×2 Mult.
+Burner Phone (R): once per breach, set Trace to 0.
+Brute force
+Sledgehammer (C): +40 Payload per card beyond the second in a chain; +15 Noise.
+Overclock (U): +1 Move per breach, Trace limit -25.
+Fork Bomb (R): each card also scores a copy at half Payload; chain Noise ×1.5.
+Compounding
+Dependency Tree (C): +1 Mult per Supply card in your deck.
+Long Con (U): +0.5 Mult permanently for each breach you clear without using a Pivot.
+Mirror Repo (R): Seeds and Typo-Squat growth are doubled.
+Anti-meta (reads the crowd)
+Cold Reader (C): Fresh cards gain +50% more Payload.
+Contrarian (U): +2 Mult if every card in the chain is Normal or Fresh.
+Archivist's Lens (U): shows each card's projected Heat tier five minutes from now.
+Hot Potato (R): +3 Mult while a Hot or Warm card is in the chain.
+Sacrifice
+Arsonist (U): Offerings give ×2 Mult instead of ×1.5.
+Martyr (R): cards you Offer also refund their Noise and give +$3.
+Prediction breakers
+Feint (C): your first chain each breach does not count toward WARDEN's prediction.
+Chaos Seed (U): WARDEN's forecast is randomized each Move; Surprise bonus becomes ×1.5.
+Reflect (R): when you are Countered, gain +10 Payload per lost Mult point.
+Utility
+Pawn Shop (C): sell values doubled.
+Second Wind (U): once per run, a failed breach costs no Integrity.
+7. The Burn system (global heat)
+This is the heart of the project. Everything here is shared state across all players.
+7.1 Measuring heat
+Use. Each time a chain resolves, every card in it emits one Use for its card ID, globally. A Persist replay counts once per play.
+Decay. Uses decay exponentially with a half-life of 15 minutes.
+Heat of a card is its decayed sum of Uses.
+Expected heat is total decayed Uses across all 30 cards divided by 30.
+Heat Index (HI) is Heat ÷ Expected. 1.0 means average popularity.
+Smoothing. A tier change only takes effect once HI has stayed past the threshold for 20 seconds, with a 0.2 hysteresis band, so the display does not flicker.
+7.2 Heat tiers
+Fresh (HI under 0.4): +30% Payload. Green glow and an icon. WARDEN has not seen this in a while. Called a "zero-day" in the UI.
+Normal (0.4–1.5): no change.
+Warm (1.5–2.5): -15% Payload.
+Hot (2.5–4.0): -35% Payload, +10 Noise.
+Burned (above 4.0): patched. -75% Payload and the card cannot count toward Ladder, Kill Chain, or Perfect Ladder.
+Tiers use icons and patterns as well as color for accessibility.
+7.3 Patch lock and rebirth
+A Burned card stays Burned for at least 10 minutes (the patch lock), even if its HI drops.
+After the lock it becomes Scarred: treated as Warm for 10 more minutes.
+When a card falls to Fresh after having been Burned, it is Reborn for 2 minutes: +50% Payload in addition to Fresh. This rewards the player who comes back to an abandoned card first.
+7.4 Class heat and Doctrine
+Heat is also computed per Class. If a Class stays above HI 1.8 for 5 minutes, WARDEN adopts a Doctrine: every card of that Class gets -10% Payload and the forecast leans harder toward it. Doctrine ends when the Class drops below 1.4. This stops "everyone plays the same class with different cards" as an escape from heat.
+7.5 Offerings (the tragedy of the commons)
+When you play a chain you may mark one Warm or Hot card as an Offering.
+It immediately adds +3 Uses to that card's heat, and the chain gets ×1.5 Mult.
+If your Offering pushes a card into a higher tier, you earn 1 Ember, and the Ledger records you as its burner.
+You are trading everyone's future for your present. Rigs like Arsonist and Martyr reward it. The Wall shows the top burners, and WARDEN comments on them.
+7.6 The Burn event (spectacle)
+When any card enters Burned:
+Every client freezes for half a second; audio drops out.
+The card's art ignites and falls as ash across the screen.
+WARDEN speaks one line.
+A Patch Note appears in the feed: "PATCH 1.14: Tunnel has been patched. 41 operators contributed. Most affected build: Ghost." Top contributors are shown only if they opted in.
+Any copy of the card in a player's hand or deck gets a PATCHED stamp.
+Rate limit: at most one full-screen burn per 45 seconds; extra burns queue as banners. Patch versions count up through the event.
+7.7 The Ghost Swarm (simulated crowd)
+To make the world alive from minute one and to survive a thin crowd, bots play as other operators.
+Target effective population: 60. Bots = max(0, 60 - real active players in the last 5 minutes). Bots fade out as real players arrive.
+Bot archetypes mirror the five loadouts (Ghost, Hammer, Gardener, Arsonist, Mimic) plus a Random bot.
+Bots avoid cards that are Warm or hotter with a probability tied to HI, so they behave like adaptive humans.
+Bots are always labeled: the Wall shows "ghosts online: N." Real Uses count at weight 1.0 and bot Uses at 0.5 so real players always lead.
+A recorded "rehearsed day" mode replays a prepared heat timeline for the demo if the network is unreliable.
+7.8 Anti-abuse
+Cap of 12 counted Uses per player per minute.
+Only completed, server-validated chains count. Offline mode counts nothing.
+Restarting runs rapidly under the same handle is deduplicated over a 30-second window.
+Top leaderboard entries are verified by replaying their seed and action log on the server.
+Handles pass a profanity filter. Names are optional.
+7.9 What a healthy meta looks like
+The three most-played cards account for under 35% of Uses at steady state.
+A card cycles from Fresh to Burned and back in roughly 2–3 hours of event time.
+No more than 20% of the pool is Burned at once.
+The top-5 list changes at least every hour, so players always have a reason to re-check the Wall.
+7.10 Tuning knobs (all live-editable on the server)
+Half-life, tier thresholds, tier penalties and bonuses, patch lock length, Offering Uses and Mult, Doctrine threshold, bot floor and weight, per-player Use cap, burn event cooldown. Editing them during the event without redeploying is a feature (section 11).
+8. WARDEN, the opponent
+8.1 The Forecast
+Before every Move WARDEN shows a forecast: five bars, one per Class, labeled with a percentage. By default the numbers are blurred to a ±15 point range. Directory Crawl and the Archivist's Lens remove the blur. The bars are what WARDEN believes you are about to do.
+8.2 How it is computed
+Probability of each Class = 50% your history (your last 8 chains in this run, newest weighted most) + 30% the crowd (global class usage over the last 10 minutes) + 20% your build (the Class mix of your deck).
+8.3 Counter rules
+A chain's dominant Class is the Class with the most cards; ties go to the Class of the highest-Payload card. Wild cards count as whichever Class helps you.
+Countered: if the dominant Class matches WARDEN's top prediction and that prediction is 40% or higher, the chain takes ×0.6 Mult.
+Surprise: if the dominant Class had under 15% probability, the chain gets ×1.3 Mult.
+Otherwise no modifier.
+8.4 Design intent
+Specialists will be countered constantly, so an all-in build needs a way to break the prediction (Feint, Chaos Seed, Reflect) or enough raw multiplier to absorb it. Mixed builds enjoy Surprise but give up Echo, Trinity, and Monoculture. The tension between going all-in and staying unpredictable is intentional.
+Balance check to run first: a mixed-Class Kill Chain with Surprise (×6.5) must not strictly beat a countered Monoculture (×3.6) in every situation. If it does, raise Monoculture to ×7 or make it immune to Doctrine.
+8.5 Edicts and bosses
+Nodes roll Edicts (section 4.8). Gates have a fixed boss rule:
+Gate 1, The Archivist (Lobby):"I kept everything you tried." Cards you played in the previous breach of this sector are Known: -25% Payload.
+Gate 2, The Mirror (Foundry):"Let's see how you like it." Your Echo, Trinity, and Monoculture chains reflect: their Noise is doubled.
+Gate 3, WARDEN itself (Vault). Three phases, one per two Moves:
+Normal forecast, but the Forecast no longer blurs for it (it is certain).
+The Crowd's Patch: every card that is currently Hot or Burned globally is treated as Burned for you.
+Everything it has learned: your three most-played cards this run are Known (-25%).
+The final boss uses the live global state against you: the sins of the whole room.
+8.6 WARDEN's Verdict (the loss screen)
+Generated on every loss and shareable as an image. Inputs: most-played card and count; favorite Class share; Offerings made; Pivots used; times Countered; cause of loss (Trace or Moves); breach reached; how many Hot or Burned cards you used; loadout.
+Structure: observation + a specific number + a polite twist. Examples of the template voice:
+"You played Tunnel twenty-two times. I stopped counting out of respect."
+"You were Countered nine times. I was not even trying."
+"You offered me four cards. The others will not forgive you. I will remember."
+"You reached the Foundry with your hands clean and still came to me. Interesting."
+Optionally an LLM (NVIDIA hosted model) rewrites the verdict from the stats with a strict prompt: at most 60 words, PG-13, second person, must include two numbers from the stats. Output is filtered against a banned-word list; any failure falls back to a template. The LLM is never in the critical path.
+8.7 Barks (sample lines)
+Forecast shown:"You will play WEB. You always do."
+Countered:"I expected that. I have expected it for eleven turns."
+Surprise:"That is not in the record. I am... interested."
+Burn event:"Thank you, operators. I have learned it. It will not work again."
+Offering:"Operator 0417 gave me Tunnel. How generous. The others will remember."
+High Trace:"You are very loud now. It is almost sweet."
+Near miss (failed by under 10%):"Ninety-six percent. I want you to sit with that."
+Gate intro:"I kept everything you tried. Shall we go through it together?"
+Crowd comment:"Nineteen of you played Tunnel in the last ten minutes. Do you talk to each other?"
+Idle (10 seconds):"Take your time. I have so much of it."
+Win:"Go, then. I will be here. I will know you."
+Rule: any line that is not a template must pass the banned-word filter and must never quote or paraphrase the source story.
+9. Progression and engagement loops
+9.1 Embers and the Archive
+All 30 cards and 20 rigs are available from the first run (it makes the demo simpler). Embers unlock things that change how you play, not power:
+Earn: +1 per breach cleared, +3 per Gate, +5 for reaching the Surface, +1 for each Offering that crosses a tier, +2 for the first run of each Hourly Descent.
+Spend: loadouts 2–5 (a loadout costs 8 Embers), terminal themes, handle badges, card back designs.
+9.2 Loadouts (starting kits)
+Ghost: Implant-heavy starter deck, starts with Ski Mask. Play low-Noise and persistent.
+Hammer: Web-heavy, starts with Sledgehammer. Loud and fast.
+Gardener: Supply-heavy, starts with Dependency Tree. Slow start, huge scaling.
+Arsonist: Mixed deck, starts with Arsonist. Burns the room for points.
+Mimic: Social-heavy, starts with Feint. Lives by out-predicting WARDEN.
+The default loadout (free) is the plain starter deck.
+9.3 Achievements (12)
+First Blood: clear a breach.
+Surface: win a run.
+Quiet Hands: win with no Hot or Burned card ever played.
+Arsonist: burn a card with an Offering.
+Unpredictable: get Surprised five times in one run.
+Specialist: win with Monoculture as your most-used chain.
+Pacifist: clear a Node using no Pivots.
+Phoenix: play a Reborn card.
+Close Call: win a breach with 1 Move left and under 10 Trace remaining.
+Collapse: be Countered five times in one breach and still clear it.
+Everyone's Problem: be the contributor named in the Patch Note.
+Verdict: receive the same Verdict category twice (a secret).
+9.4 Leaderboards on the Wall
+Hourly Descent: best score for the hour's seed.
+Quiet Hands: lowest average heat among Surface wins.
+Biggest Burners: most Offering burns.
+Streak: most consecutive breaches cleared.
+9.5 Engagement loop map
+Near-miss: the failure screen says exactly how close you were.
+One more run: restart in under 3 seconds with the same loadout and a new seed.
+Variable reward: the Market offers a different mix every time; a Fresh card is a small jackpot.
+Social proof: the Wall shows how many operators are descending right now.
+Shareability: the Verdict image and the seed link ("play my seed").
+Time pressure from others: the Wall's "patch clock" counts down to the next likely burn.
+Re-engagement (P2): opt-in iMessage or SMS via Photon: "Your Spearphish was just patched." Capped at 3 per day, event only, with a stop reply.
+10. Economy and the Black Market
+10.1 Credits
+Start the run with $4.
+Clear reward: $3 for a Node, $5 for a Gate.
++$1 per unused Move.
+Overkill: +$1 per 25% above Quota, max $3.
+Interest: +$1 per $5 held at the end of a breach, max +$4.
+10.2 Market contents per visit
+3 exploit cards, 2 rigs, 1 playbook. Reroll costs $2, then +$1 per reroll that visit. Removing a card from your deck costs $3, then +$1 per removal.
+10.3 Prices
+Cards: Stage 1–2 = $3, Stage 3 = $4, Stage 4–5 = $6.
+Rigs: C = $5, U = $7, R = $9.
+Playbook: $4.
+Selling: half the price paid, rounded down.
+10.4 Heat prices
+The Market reads the Wall. Fresh cards cost +25% (everyone wants them). Hot cards cost -25% (a trap). Burned cards are out of stock ("patched"). Warm and Normal cards cost the base price.
+10.5 Deck rules
+Minimum deck size 15, maximum 40. Duplicates allowed. A thin deck makes a build consistent but a Hot card more visible to WARDEN's "your build" term.
+10.6 Target numbers
+By the Foundry, a typical player has spent about $15–20 across two Markets and should feel they could not afford everything. By the Vault the player should be able to run a coherent two-card-class build with two or three scaling rigs. If most players hoard credits, lower interest. If most players cannot afford a rig, raise starting cash.
+11. Technical architecture (design level)
+11.1 Overview
+Three parts, plus optional services.
+Client. A mobile-first web app. No install, opens from a QR code.
+Backend. SpacetimeDB (Clockwork Labs): the database and server logic in one, pushing live updates to every connected client.
+Shared engine. A pure, deterministic rules library used by both client and backend, so the server can verify any run.
+Optional services. An LLM for verdict text, Photon for messaging, a small analytics table.
+Data flows one way for scoring and another for heat: a client plays a chain, the server validates it with the same engine and records the Uses, a scheduled job recomputes heat and tiers, and every client is told about the change.
+11.2 Data model (tables)
+Operator: id, handle, show-name flag, Ember balance, unlocked loadouts, created time.
+Run: id, operator, seed, loadout, state (active, won, lost), breach reached, score, started, ended, compressed action log, verified flag.
+UseEvent: id, card id, class, operator, run, timestamp, is-offering, weight.
+CardHeat: card id, heat, heat index, tier, tier-since time, patched-until time, reborn-until time.
+ClassHeat: class, heat index, doctrine active.
+PatchNote: id, version number, timestamp, card id, contributor count, text.
+FeedItem: the Wall's event stream (burns, offerings, new records).
+LeaderboardEntry: board, operator, score, hour seed.
+Config: key, value. Every tuning knob lives here.
+GhostState: bot id, archetype, active, last action.
+11.3 Server logic
+On request from a client:
+Register an operator.
+Start a run (server assigns a seed).
+Submit a chain (server re-computes the score with the shared engine and heat at that moment; rejects illegal plays).
+Finish a run (records result, queues verification for high scores).
+Offer a card.
+On a schedule:
+Every 2 seconds: apply decay, recompute Heat Index, change tiers with hysteresis, create Patch Notes and FeedItems.
+Every 3 seconds: tick the Ghost Swarm.
+Every hour: rotate the Hourly Descent seed and snapshot the leaderboard.
+Heat during a Move. A client sends the chain plus the version of the heat snapshot it used. The server accepts the client's score if that version is within the last 10 seconds, otherwise it re-scores with current heat and tells the client.
+11.4 Client subscriptions
+CardHeat, ClassHeat, PatchNote, FeedItem, LeaderboardEntry, Config, and the player's own Operator and Run.
+11.5 Determinism and verification
+The engine has no hidden state: the same seed, loadout, and ordered action list always produce the same result. All randomness (draws, Market stock, Edicts, bot choices in replays) comes from a seeded generator. This enables:
+Server verification of top leaderboard runs.
+"Play my seed" challenges.
+The Sprint replay at the end of a demo.
+Trustworthy balance simulation.
+Engine test list (design): every card effect individually; every chain type, including edge cases with wilds (Helpdesk Ghost, Vendor Backdoor); Persist interactions; Trace and Noise ordering; heat tier math and hysteresis; forecast math; Countered and Surprise thresholds; boss rule application; economy rewards; deterministic replay equals live result.
+11.6 Client architecture
+State machine: Title ? Loadout ? Run map ? Breach ? Market ? End (and Sprint as a shortcut).
+Rendering: standard web UI for text and layout, with a canvas or WebGL layer for card effects, particles, and the burn sequence.
+Targets: 60 fps on a mid-range phone, first load under 3 MB, time to first playable move under 10 seconds.
+PWA: installable, works offline for Offline Mode.
+Audio: web audio with a mute toggle, off by default on mobile.
+11.7 The Wall (spectator client)
+Read-only, subscribed to heat, feed, leaderboards, and the player count. Designed for a 16:9 screen across a room. It must be legible at 3 meters (see 12).
+11.8 Optional services
+LLM (NVIDIA hosted model): verdict rewrite. 2-second timeout, cached per run, template fallback.
+Photon: opt-in notifications behind a feature flag.
+Analytics: counters for Plays, Runs, Burns, Offerings, Unique operators. These are the numbers you quote in the pitch.
+11.9 Live ops console (admin panel)
+A protected page, for the team only. It can:
+Edit any Config knob live.
+Freeze heat or reset it.
+Spawn or remove ghosts.
+Force a burn (for the demo, labeled in the feed as "demo").
+Replay a prepared heat timeline ("rehearsed day").
+Rotate the hour's seed.
+Changes made here are announced as Patch Notes. Balance changes become part of the story.
+11.10 Failure modes and fallbacks
+Backend unreachable: the client drops into Offline Mode with a frozen heat snapshot and simulated crowd. It says so in-world.
+Venue Wi-Fi saturated: the QR link also works over cellular. Keep the Wall on a wired or dedicated connection if possible.
+Heat flicker: raise hysteresis in Config.
+Spam or abuse: per-player caps and the rate limits in 7.8.
+LLM slow or down: template verdicts.
+Photon down: silent no-op.
+Burn spectacle too frequent: raise the cooldown knob.
+Judge opens it on a bad browser: a compatibility check shows a friendly message and a recorded demo link.
+11.11 Security and privacy
+Handles only; no real names, no email required.
+Phone numbers are collected only for Photon opt-in, used only for the event, and deleted afterward.
+Server validates every request; the client is never trusted for heat or scoring.
+No secrets in the client. Admin panel behind a key.
+Because it is a hacking-themed game, the app itself must behave: input validation, rate limits, and no content that teaches real attacks.
+12. UX, UI, art, and audio
+12.1 Platforms
+Phone in portrait is the primary target (QR flow). Desktop landscape is supported. The Wall is 16:9.
+12.2 Screens
+Title: handle entry or auto-number, big PLAY SPRINT button, small links to Full Descent and Offline.
+Loadout select: five kits with one-line pitches and Ember locks.
+Run map: a vertical path of nine nodes (three sectors), current node highlighted, Gates marked.
+Breach (the main screen):
+Top strip: Quota bar, Trace bar, Integrity pips, credits.
+Rig row under it.
+Center: four chain slots, a live "payload × mult" preview, and the chain type name.
+Right or top-overlay: WARDEN panel with the forecast bars and the current bark.
+Bottom: the hand, fanned, with each card showing a heat badge.
+Buttons: PLAY and PIVOT, plus an Offer toggle on Warm or Hot cards.
+Market: shelf layout with prices (heat-priced), reroll, remove-card.
+Gate intro: boss card, rule, bark.
+End screen: Surface (win) or WARDEN's Verdict (loss), with a Share button and "Again" button.
+The Wall: a 30-card heat grid in the center (color and icon by tier), the patch-note feed on the left, leaderboards on the right, a top strip with "operators descending," "ghosts online," and a countdown to the next likely burn, and a neon-skyline backdrop.
+12.3 Card anatomy
+Class color along the left edge, Stage pips (1–5), Payload top-left, Noise top-right, name, a glyph, effect text, and a heat badge (icon plus color) in the corner. Tapping a card expands it and shows its current Heat Index and adjusted Payload.
+12.4 Information design rules
+The preview shows the final score before you commit.
+Tap any multiplier in the preview to see why it applies.
+Undo is free until you press PLAY.
+Never hide a needed number behind hover.
+Minimum text size 14 px; all primary actions reachable by one thumb.
+12.5 Art direction
+Look: terminal and CRT, cold and clinical, with one hot color. A neon city appears only as a distant backdrop to echo the event theme.
+Palette: Void #07080B, Bone #E8E6DF, Ash #6B6F78, WARDEN Red #FF2D3D, Fresh Cyan #39E1F0, Warm Amber #FFB020, Ember Orange #FF6A2B.
+Type: a monospace face for body, one heavy condensed display face for numbers and titles.
+Cards: simple glyphs plus Class color plus Stage pips. 30 glyphs is the whole art budget. Dithering and scanlines add texture cheaply.
+WARDEN: a grid of dots forming an unblinking eye. It dilates when it predicts, glitches on Surprise, and goes still when you lose.
+12.6 Juice (in priority order)
+Score count-up with ticking sound and a mult "slam."
+Screen shake scaled to the score.
+Chain lock-in animation as cards snap together.
+COUNTERED and SURPRISE stamps.
+Trace bar pulses red as it nears 100.
+The Burn sequence (7.6).
+Verdict typewriter text.
+Haptic taps on phones.
+Card fan hover and lift.
+12.6b Audio
+SFX: card select, card lock, score tick, mult slam, Countered thud, Surprise glitch, Trace alarm, Market purchase, burn (a low tone that drops everything else out), Verdict blip.
+Music: a low ambient bed with three layers that fade in as Trace rises, plus a stinger for each Gate.
+WARDEN voice: text only with a distinctive typewriter blip. Text-to-speech is [P2].
+12.7 Accessibility and safety
+Tier is shown by icon and pattern as well as color.
+Reduced-motion mode: no shake, no flash, simplified burn.
+No flashing faster than 3 times per second anywhere, including the Burn sequence.
+Text scale option; sound off by default on mobile; basic screen-reader labels.
+12.8 Onboarding copy
+Three lines: Play cards to fill the bar. Do not fill the other bar. The more people play a card, the weaker it gets. Everything else is learned by doing.
+13. Balance and playtest plan
+13.1 Targets
+Full Descent win rate: 10–20% for first-time players, 35–45% for experienced.
+Median run length: 12–15 minutes. Sprint: 60–90 seconds.
+Sprint win rate: about 60%, so judges feel capable and see the payoff.
+Expected score per Move: early 120–250, Foundry 800–1,500, Vault 3,000–6,000+.
+Meta health metrics: see 7.9.
+13.2 Before the event (paper)
+Print all 30 cards and 20 rigs on paper. Use dice for the heat: roll to "play" a crowd. Run at least 10 playtests with friends. Track which cards are never taken, which rigs are always taken, and what players say in the first 60 seconds. Also compute average expected score for each loadout in a spreadsheet.
+13.3 Simulation (design)
+Build a bot harness in the first half of the event: each loadout gets a simple policy bot (greedy chain, pivot when the hand is weak, buy the best matching rig). Run thousands of simulated runs to estimate win rates by loadout, then tune quota growth and rig strength. The same bots become the Ghost Swarm.
+13.4 Live tuning during the event
+Watch heat per card, the share held by the top three, time since the last burn, and Sprint completion rate. Change Config knobs through the console, no more than once per 30 minutes, and none in the last 3 hours. Announce each change as a Patch Note in WARDEN's voice.
+13.5 Symptoms and fixes
+Everyone plays the same three cards: shorten the half-life or lower the Burned threshold.
+Nobody ever sees a Burned card: thresholds too high or crowd too small. Lower thresholds or raise the bot floor.
+Heat flickers: raise hysteresis.
+Win rate under 5%: lower quota growth from 1.5 to 1.4.
+Win rate over 50%: make Countered ×0.5.
+Mixed builds always best: see 8.4.
+Players ignore the forecast: add a tooltip and put Directory Crawl in every starter deck.
+The Wall is boring: increase burn frequency or queue banners.
+14. Demo, pitch, and submission
+14.1 Booth setup
+Laptop running the game and the admin console, a second screen or TV running the Wall, a printed QR poster with the three-line how-to-play, and a physical PATCHED stamp or sticker as a giveaway. Keep the Wall visible from the aisle.
+14.2 The 90-second judge flow
+0:00 Hook: "Every zero-day dies the moment too many people use it. So that's the rule of our game."
+0:10 Point at the Wall: live heat on 30 cards, a feed of patches, operators descending right now.
+0:15 Hand over a device in Sprint. Preset build, two rigs. They make two chains.
+0:45 The forecast fires. They get Countered or Surprised, and WARDEN comments. Their last card's heat ticks up on the Wall.
+1:10 A burn lands (prepared with the console if needed; the feed labels demo burns honestly). The screen goes silent, the card ignites, a patch note appears.
+1:25 Close: "Over this hackathon, N operators have played. WARDEN has burned M cards. The winning move is the one nobody else found."
+14.3 Two-minute talk outline
+The hook (15 s).
+What you play (20 s): cards, chains, quotas, Trace.
+The twist (30 s): the shared Burn and how it reshapes builds.
+WARDEN predicts you (15 s).
+Technical depth (25 s): SpacetimeDB live sync, one deterministic engine on client and server, live-tunable config, the Ghost Swarm.
+What's next (10 s): daily seeds, more cards, real classrooms or security training.
+Invitation (5 s): scan the code.
+14.4 Q&A cheat sheet
+"Is it educational?" Yes: the Stage ladder is a plain-language kill chain, and the Burn teaches why a vulnerability's value disappears when it is discovered and fixed.
+"Why a game?" Because discovery under a shifting meta is the most replayable thing we know, and the shared state is the part nobody else will have.
+"How do you stop cheating?" Server-side re-scoring with the shared engine, caps per player, verification of top runs by replay.
+"What if only five people play?" A labeled Ghost Swarm keeps the meta alive, and Offline Mode still works.
+"How do you balance it?" Simulated bot runs and live Config knobs, with every change announced in-world.
+"What is the AI?" WARDEN's forecast is a real prediction model over your history, the crowd, and your deck. The LLM only writes flavor.
+"Does it teach real hacking?" No. It teaches the shape of intrusion and defense with fictional abstractions.
+"What did you build in 24 hours?" Say it plainly, with the P0 list in 15.4.
+14.5 Devpost write-up outline
+Inspiration (the zero-day lifecycle plus roguelike discovery) ? What it does ? How we built it (engine, SpacetimeDB, heat, Ghost Swarm) ? Challenges (balance, determinism, flicker) ? Accomplishments ? What we learned ? What's next. Built With: the stack list. Six screenshots: Breach, Forecast, Market, a Burn, the Wall, a Verdict.
+Video storyboard (60–90 s): cold open on the Wall; cut to a hand playing a chain; Countered stamp; a burn rolling across devices; the Verdict; the Patch Notes feed; end card with the QR.
+14.6 Sponsor angles
+Clockwork Labs: SpacetimeDB is the backbone: shared heat, live tuning, replay verification. Not a bolt-on.
+Photon: a re-engagement loop with opt-in patch alerts.
+NVIDIA: LLM-written verdicts, clearly optional.
+General track: originality and polish.
+Do not claim fit with a sponsor track that was not published. Read the real prompts at opening ceremony and choose which tracks to submit to then.
+14.7 Backup demo plan
+Offline Mode on the laptop, a recorded screen capture of the Wall and a burn, and the "rehearsed day" heat timeline on a loop. Rehearse the failure: practice switching to backup in under 10 seconds.
+15. Production plan
+15.1 Before the event
+Confirm the rules with organizers (hello@hackutd.co): past HackUTD rules said projects must be started at the event. Ask exactly what pre-work is allowed. Do not write project code before the start unless they say it is fine.
+Allowed in spirit: this design doc, a paper prototype, a card spreadsheet, a style sheet, learning SpacetimeDB from its own tutorial with throwaway code, choosing roles.
+Decide the team and roles.
+15.2 Roles (four people; merge if fewer)
+Engine and gameplay lead: rules, scoring, cards, boss logic, bot harness.
+Backend lead: SpacetimeDB tables, heat jobs, live ops console, verification.
+Frontend and juice lead: screens, effects, mobile layout, the Wall.
+Art, audio, and writing: glyphs, palette, sound, WARDEN's lines, Devpost, video, booth.
+15.3 Timeline (24 hours)
+H0–1: kickoff, repo, accounts, deploy a hello-world to client and backend, lock the card list as a data file.
+H1–6: pure engine with tests (cards, chains, scoring, quotas); UI skeleton with placeholders; backend tables and a stub heat job.
+H6–8, Milestone 1: a full single breach is playable locally with real scoring.
+H8–12: run loop and Market; client reads heat, server writes it; Wall v1; forecast and Countered/Surprise.
+H12–14, Milestone 2: a full run is playable online and two devices see the same heat change.
+H14–17: bosses and Edicts; Ghost Swarm; Patch Notes and the Burn event.
+H17–19: juice, audio, art pass; Verdict.
+H19–21: playtest with other hackers; tune; fix the top 10 bugs.
+H21: FEATURE FREEZE.
+H21–23: Devpost, video, booth, rehearse the demo twice.
+H23–24: buffer and early submission. Re-time against the real deadline.
+15.4 Priorities and the cut list
+Minimum winning demo [P0]: Sprint mode, live heat on a shared backend, the Burn event, the Wall, the Forecast with Countered/Surprise, a handful of working cards and rigs, Offline Mode.
+[P1]: Full Descent with Market and three Gates, Ghost Swarm, Patch Notes, Verdict, all 30 cards and 20 rigs.
+[P2]: Hourly Descent, achievements, loadouts 2–5, Doctrine, Reborn, Photon, LLM verdicts, text-to-speech.
+Cut in this order when behind: Photon, LLM, Hourly Descent, achievements, loadouts 2–5, Doctrine, Reborn, then reduce rigs to 12 and cards to 20, then ship the P0 only.
+15.5 Risk register
+The roguelike is not fun by itself. Mitigation: paper-test first; make Sprint satisfying alone.
+Heat feels unfair. Mitigation: preview shows heat effects before commit; tune penalties; Fresh bonus rewards discovery.
+Not enough players for a living meta. Mitigation: Ghost Swarm, labeled, plus "rehearsed day."
+Backend or Wi-Fi fails. Mitigation: Offline Mode, recorded backup, cellular QR.
+Scope too big. Mitigation: the cut list and the freeze at H21.
+Rules violation on pre-work. Mitigation: confirm in writing; write no project code early.
+Judges think it is just a game. Mitigation: lead the pitch with the live shared state and server-verified determinism.
+Flashing or sensory harm. Mitigation: the 3 Hz rule and reduced-motion mode.
+IP complaint about the AM homage. Mitigation: nothing copied; WARDEN is original; no names.
+16. Rules, IP, safety, and open questions
+16.1 IP
+The homage takes tone only. No names, characters, or text from I Have No Mouth, and I Must Scream. All art original; fonts and sounds licensed or openly licensed. Check the event's rules on AI-generated assets before using any.
+16.2 Content safety
+PG-13. No real exploit instructions. Fictional company names only. No real CVEs, tools, or vendors. Barks and Verdicts pass the banned-word filter.
+16.3 Privacy
+Handles only by default, opt-in names, Photon numbers deleted after the event. Verdicts use only in-game stats. Because minors may attend, collect nothing beyond a handle.
+16.4 Open questions
+How many teammates and what skills (especially art and audio)?
+Which sponsor tracks and prompts are actually published at kickoff?
+What exactly do the rules say about pre-event work?
+Will there be a screen for the Wall, and how good is the venue network?
+Phone-first or laptop-first as the primary play surface?
+Is the Offering mechanic too mean, or is it the soul of the game?
+Is the Foundry/Vault sector theming worth the art cost, or should sectors be color swaps?
+Name: BURNED, THE UNDER, PATCHED, or WARDEN'S LEDGER?
+16.5 Decisions made so far
+The game is BURNED: an exploit-card roguelike with a global heat meter.
+The antagonist is WARDEN, with an AM-inspired tone, not AM.
+Shared real-time state runs on SpacetimeDB.
+Everything outside the P0 list can be cut.
+Rating is PG-13.
+16.6 Glossary
+Operator: a player. The Under: the setting. Surface: the exit.
+Breach: one level. Node: a normal breach. Gate: a boss breach.
+Chain: the cards you play in one Move. Move: one chain played. Pivot: discard and redraw.
+Payload: points. Mult: the multiplier. Quota: target Progress.
+Noise: adds to Trace. Trace: the failure meter.
+Rig: a passive modifier. Playbook: a chain-type upgrade.
+Heat, HI, Tier: shared popularity and its effect. Burn/Burned: the highest tier; patched.
+Offering: deliberately burning a card for a bonus.
+Forecast: WARDEN's prediction. Countered/Surprise: its penalties and bonuses.
+Ghost Swarm: labeled simulated crowd. The Wall: the spectator screen.

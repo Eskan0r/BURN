@@ -1,0 +1,42 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+*.tsbuildinfo
+
+# Environment / secrets
+.env*
+!.env.example
+
+# Local data and deployment
+.local/
+.vercel/
+
+# Test / QA output (screenshots, reports, browser profiles from scripts/qa*.mjs and balance.mjs)
+artifacts/
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/
+coverage/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Editor / OS
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Claude Code local settings
+.claude/settings.local.json

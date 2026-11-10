@@ -1,0 +1,11 @@
+import {createRoom,mutateRoom,publicRoom} from './room.js';
+let offlineRoom=null;
+const KEY='burned-session-v1',OFFLINE='burned-offline-v1';
+export function getSession(){try{return JSON.parse(sessionStorage.getItem(KEY)||'null')}catch{return null}}
+export function saveSession(s){if(s)sessionStorage.setItem(KEY,JSON.stringify(s));else sessionStorage.removeItem(KEY)}
+export async function request(session,body){
+ if(session?.offline){if(!offlineRoom){try{offlineRoom=JSON.parse(localStorage.getItem(OFFLINE)||'null')}catch{}}if(!offlineRoom)throw new Error('Offline run not found. Start a new practice room.');offlineRoom=mutateRoom(offlineRoom,session.token,body,Date.now());offlineRoom.version++;localStorage.setItem(OFFLINE,JSON.stringify(offlineRoom));return {room:publicRoom(offlineRoom,session.token,Date.now()),storage:'offline',token:session.token}}
+ const response=await fetch('/api/room',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...body,code:session?.code||body.code,token:session?.token}),signal:AbortSignal.timeout(10000)});let result;try{result=await response.json()}catch{throw new Error('Room server unavailable. Offline practice is ready.')}if(!response.ok||result.error)throw new Error(result.error||'Cannot reach the room.');return result;
+}
+export function createOffline(name){const token=crypto.randomUUID();offlineRoom=createRoom('LOCAL1',token,name,Date.now());const session={offline:true,token,code:'LOCAL1'};saveSession(session);localStorage.setItem(OFFLINE,JSON.stringify(offlineRoom));return {session,room:publicRoom(offlineRoom,token,Date.now())}}
+let context;export function sound(type,enabled){if(!enabled)return;try{context||=new (window.AudioContext||window.webkitAudioContext)();if(context.state==='suspended')context.resume();const patterns={select:[350,490],pivot:[170,100],play:[180,270,400,620],buy:[500,750,1000],burn:[110,75,40],win:[360,480,720,960],counter:[140,90],surprise:[300,600,1100]};const notes=patterns[type]||patterns.select;notes.forEach((f,i)=>{const o=context.createOscillator(),g=context.createGain();o.type=type==='burn'?'sawtooth':'square';o.frequency.value=f;const t=context.currentTime+i*.055;g.gain.setValueAtTime(.025,t);g.gain.exponentialRampToValueAtTime(.0001,t+.12);o.connect(g).connect(context.destination);o.start(t);o.stop(t+.13)})}catch{}}
